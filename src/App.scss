@@ -1,0 +1,26 @@
+.App {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  align-items: center;
+  justify-content: center;
+
+  .Modal {
+    width: 24rem;
+    padding: 1em;
+    border: 1px solid #555;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, .25);
+  }
+
+  form {
+    .FormGroup {
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+}
