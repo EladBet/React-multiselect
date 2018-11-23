@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { addClass } from './AddClass.service';
 import ComboboxOption from './ComboboxOption';
+
 var guid = 0;
-var k = function(){};
 
 export default class Combobox extends Component {
     componentWillMount() {
@@ -85,9 +85,9 @@ export default class Combobox extends Component {
 
     handleInputChange = () => {
         var value = this.input.value;
-        this.clearSelectedState(function() {
+        this.clearSelectedState(() => {
             this.props.onInput(value);
-        }.bind(this));
+        });
     };
 
     handleInputFocus = () => {
@@ -225,16 +225,16 @@ export default class Combobox extends Component {
     selectOption = (child, options) => {
         options = options || {};
         this.setState({
-            // value: child.props.value,
+            value: child.props.value,
             // inputValue: getLabel(child),
             matchedAutocompleteOption: null
-        }, function() {
+        },() => {
             this.props.onSelect(child.props.value, child);
             this.hideList();
             this.clearSelectedState(); // added
             if (options.focus !== false)
                 this.selectInput();
-        }.bind(this));
+        });
         this.input.value = '' // added
     };
 
@@ -269,10 +269,10 @@ export default class Combobox extends Component {
 
     focusSelectedOption = () => {
         var selectedIndex;
-        React.Children.forEach(this.props.children, function(child, index) {
+        React.Children.forEach(this.props.children, (child, index) => {
             if (child.props.value === this.state.value)
                 selectedIndex = index;
-        }.bind(this));
+        });
         this.showList();
         this.setState({
             focusedIndex: selectedIndex
@@ -282,10 +282,10 @@ export default class Combobox extends Component {
     findInitialInputValue = () => {
         // TODO: might not need this, we should know this in `makeMenu`
         var inputValue;
-        React.Children.forEach(this.props.children, function(child) {
+        React.Children.forEach(this.props.children, (child) => {
             if (child.props.value === this.props.value)
                 inputValue = getLabel(child);
-        }.bind(this));
+        });
         return inputValue;
     };
 

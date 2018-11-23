@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import categories from './categories';
-import MultiSelect from './MultiSelect';
+import TokenInput from './TokenInput';
 import './App.scss';
 
 class App extends Component {
@@ -24,12 +24,15 @@ class App extends Component {
             <div className="App">
                 <div className="Modal">
                     <form>
-                        <div className="FormGroup">
+                        <div className="FormGroup MultiSelect">
                             <label>Categories</label>
-                            <MultiSelect
-                                onChange={this.onChangeSelect}
+                            <TokenInput
+                                isDisabled={false}
+                                showListOnFocus={false}
                                 options={this.state.options}
-                                selectedOptions={this.state.selectedOptions}
+                                onChange={this.onChangeSelect}
+                                selected={this.state.selectedOptions}
+                                placeholder='Enter tokens here'
                             />
                         </div>
                         <label>Selected</label>

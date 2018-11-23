@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
+import { uniq, without } from 'lodash-node';
 import classnames from 'classnames';
 import Combobox from './Combobox';
+import ComboboxOption from './ComboboxOption';
 import Token from './Token';
+import loadingGif from './spinner.gif';
+
+import './MultiSelect.scss';
 
 export default class TokenInput extends Component {
     state = {
+        input: '',
+        loading: false,
+        options: this.props.options,
         selectedToken: null
     };
 
@@ -18,28 +26,75 @@ export default class TokenInput extends Component {
         }
     };
 
-    handleInput = (inputValue) => {
-        this.props.onInput(inputValue);
+    handleRemoveLast = () => {
+        this.handleRemove(this.props.selected[this.props.selected.length - 1]);
     };
 
-    handleSelect = (event, option) => {
-        var input = this.comboLi.querySelector('input');
-        this.props.onSelect(event, option)
+    ///
+    handleRemove = (value) => {
+        var selectedOptions = uniq(without(this.props.selected, value))
+        this.props.onChange(selectedOptions)
+    };
+
+    handleSelect = (value, combobox) => {
+        if (typeof value === 'string') {
+            value = { value: value, label: value };
+        }
+
+        var selected = uniq(this.props.selected.concat([value]))
         this.setState({
             selectedToken: null
         })
-        this.props.onInput(input.value);
+
+        this.props.onChange(selected)
     };
 
-    handleRemove = (value) => {
-        var input = this.comboLi.querySelector('input');
-        this.props.onRemove(value);
-        input.focus();
+    handleInput = (userInput) => {
+        this.setState({
+            input: userInput,
+            loading: true,
+            options: []
+        });
+        setTimeout(() => {
+            this.filterTags(this.state.input)
+            this.setState({
+                loading: false
+            })
+        }, 500)
     };
 
-    handleRemoveLast = () => {
-        this.props.onRemove(this.props.selected[this.props.selected.length - 1]);
+    filterTags = (userInput) => {
+        if (userInput === '')
+            return this.setState({ options: [] });
+        var filter = new RegExp('^' + userInput, 'i');
+        var filteredNames = this.props.options.filter((state) => {
+            return filter.test(state.label);
+        }).filter((state) => {
+            return this.props.selected
+                .map(function (value) {
+                    return value.label
+                })
+                .indexOf(state.label) === -1
+        });
+        this.setState({
+            options: filteredNames
+        });
     };
+
+    renderComboboxOptions = () => {
+        return this.state.options.map((name) => {
+            return (
+                <ComboboxOption
+                    key={name.value}
+                    value={name}
+                    className="ic-tokeninput-option"
+                    isFocusable={name.label.length > 1}
+                >{name.label}</ComboboxOption>
+            );
+        });
+    };
+
+    ///
 
     render() {
         var isDisabled = this.props.isDisabled;
@@ -59,6 +114,13 @@ export default class TokenInput extends Component {
             'ic-tokens-disabled': isDisabled
         });
 
+        var options = this.state.options.length ?
+            this.renderComboboxOptions() : [];
+
+        const loadingComponent = (
+            <img src={loadingGif} />
+        )
+
         return (
             <ul className={classes} onClick={this.handleClick}>
                 {tokens}
@@ -66,20 +128,21 @@ export default class TokenInput extends Component {
                     <Combobox
                         id={this.props.value}
                         aria-label={this.props['combobox-aria-label']}
+                        showListOnFocus={this.props.showListOnFocus}
                         ariaDisabled={isDisabled}
                         onFocus={this.handleFocus}
                         onInput={this.handleInput}
-                        showListOnFocus={this.props.showListOnFocus}
                         onSelect={this.handleSelect}
                         onRemoveLast={this.handleRemoveLast}
                         value={this.state.selectedToken}
                         isDisabled={isDisabled}
+                        autocomplete="inline"
                         placeholder={this.props.placeholder}>
-                        {this.props.menuContent}
+                        {options}
                     </Combobox>
                 </li>
                 {this.props.isLoading && <li className="ic-tokeninput-loading flex">
-                    {this.props.loadingComponent}
+                    {loadingComponent}
                 </li>}
             </ul>
         );
