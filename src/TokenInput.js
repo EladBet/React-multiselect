@@ -141,7 +141,7 @@ export default class TokenInput extends Component {
                         {options}
                     </Combobox>
                 </li>
-                {this.props.isLoading && <li className="ic-tokeninput-loading flex">
+                {this.state.loading && <li className="ic-tokeninput-loading flex">
                     {loadingComponent}
                 </li>}
             </ul>
