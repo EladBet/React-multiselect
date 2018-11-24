@@ -1,41 +1,81 @@
 import React, { Component } from 'react';
-import './MultiSelect.scss';
-import TokenInput from './TokenInput';
-import ComboboxOption from './ComboboxOption';
+import PropTypes from 'prop-types';
 import { uniq, without } from 'lodash-node';
+import classnames from 'classnames';
+import Combobox from './Combobox';
+import ComboboxOption from './ComboboxOption';
+import Token from './Token';
+import loadingGif from './spinner.gif';
+import './MultiSelect.scss'
 
+import './MultiSelect.scss';
 
 export default class MultiSelect extends Component {
+    static propTypes = {
+        selected: PropTypes.array.isRequired,
+        showListOnFocus: PropTypes.bool,
+        placeholder: PropTypes.string,
+        isDisabled: PropTypes.bool,
+        options: PropTypes.any,
+        onChange: PropTypes.func
+    };
+
+
     state = {
         input: '',
         loading: false,
-        selected: this.props.selectedOptions,
-        options: this.props.options
+        options: this.props.options,
+        selectedToken: null
     };
 
-    handleChange = (value) => {
-        this.setState({
-            selected: value
-        })
+    handleClick = () => {
+        this.comboLi.querySelector('input').focus();
+    };
+
+    handleFocus = () => {
+        if (this.props.onFocus) {
+            this.props.onFocus();
+        }
+    };
+
+    handleRemoveLast = () => {
+        this.handleRemove(this.props.selected[this.props.selected.length - 1]);
     };
 
     handleRemove = (value) => {
-        var selectedOptions = uniq(without(this.state.selected,value))
-        this.handleChange(selectedOptions)
+        const input = this.comboLi.querySelector('input');
+        input.focus();
+        const selectedItem = this.state.options.map((state) => {
+            if (state.value === value.value) {
+                state.isSelected = true;
+            }
+            return state;
+        });
+        const options = this.state.options.map((state) => {
+            if (state.value === value.value) {
+                state.isSelected = false;
+            }
+            return state;
+        });
+        const selectedOptions = uniq(without(this.props.selected, value));
+        this.props.onChange(selectedOptions);
+        this.setState({ options });
     };
 
-    handleSelect = (value, combobox) => {
-        if(typeof value === 'string') {
-            value = {value: value, label: value};
-        }
-
-        var selected = uniq(this.state.selected.concat([value]))
+    handleSelect = (value) => {
+        const options = this.state.options.map((state) => {
+            if (state.value === value.value) {
+                state.isSelected = true;
+            }
+            return state;
+        });
+        const selected = uniq(this.props.selected.concat([value]));
         this.setState({
-            selected: selected,
-            selectedToken: null
-        })
+            selectedToken: null,
+            options
+        });
 
-        this.handleChange(selected)
+        this.props.onChange(selected)
     };
 
     handleInput = (userInput) => {
@@ -43,25 +83,21 @@ export default class MultiSelect extends Component {
             input: userInput,
             loading: true,
             options: []
-        })
-        setTimeout(function () {
-            this.filterTags(this.state.input)
+        });
+        setTimeout(() => {
+            this.filterTags(this.state.input);
             this.setState({
                 loading: false
             })
-        }.bind(this), 500)
+        }, 500)
     };
 
     filterTags = (userInput) => {
         if (userInput === '')
-            return this.setState({options: []});
-        var filter = new RegExp('^'+userInput, 'i');
-        var filteredNames = this.props.options.filter((state) => {
-            return filter.test(state.label); // || filter.test(state.value);
-        }).filter((state) => {
-            return this.state.selected
-                .map(function(value) { return value.label })
-                .indexOf(state.label) === -1
+            return this.setState({ options: [] });
+        const filter = new RegExp('^' + userInput, 'i');
+        const filteredNames = this.props.options.filter((state) => {
+            return filter.test(state.label);
         });
         this.setState({
             options: filteredNames
@@ -74,6 +110,7 @@ export default class MultiSelect extends Component {
                 <ComboboxOption
                     key={name.value}
                     value={name}
+                    className="ic-tokeninput-option"
                     isFocusable={name.label.length > 1}
                 >{name.label}</ComboboxOption>
             );
@@ -81,27 +118,53 @@ export default class MultiSelect extends Component {
     };
 
     render() {
-        var options = this.state.options.length ?
+        const isDisabled = this.props.isDisabled;
+        const tokens = this.props.selected.map((token) => {
+            return (
+                <Token
+                    onFocus={this.handleFocus}
+                    onRemove={this.handleRemove}
+                    value={token}
+                    name={token.label}
+                    key={token.value} />
+            );
+        });
+
+        const classes = classnames('ic-tokens flex', {
+            'ic-tokens-disabled': isDisabled
+        });
+
+        const options = this.state.options.length ?
             this.renderComboboxOptions() : [];
 
         const loadingComponent = (
-            <img src='spinner.gif' />
-        )
+            <img src={loadingGif} />
+        );
 
         return (
-            <div className="MultiSelect">
-                <TokenInput
-                    isLoading={this.state.loading}
-                    loadingComponent={loadingComponent}
-                    menuContent={options}
-                    onChange={this.handleChange}
-                    onInput={this.handleInput}
-                    onSelect={this.handleSelect}
-                    onRemove={this.handleRemove}
-                    selected={this.state.selected}
-                    placeholder='Enter tokens here'
-                />
-            </div>
+            <ul className={classes} onClick={this.handleClick}>
+                {tokens}
+                <li className="inline-flex" ref={e => this.comboLi = e}>
+                    <Combobox
+                        id={this.props.value}
+                        aria-label={this.props['combobox-aria-label']}
+                        showListOnFocus={this.props.showListOnFocus}
+                        ariaDisabled={isDisabled}
+                        onFocus={this.handleFocus}
+                        onInput={this.handleInput}
+                        onSelect={this.handleSelect}
+                        onRemoveLast={this.handleRemoveLast}
+                        value={this.state.selectedToken}
+                        isDisabled={isDisabled}
+                        autocomplete="inline"
+                        placeholder={this.props.placeholder}>
+                        {options}
+                    </Combobox>
+                </li>
+                {this.state.loading && <li className="ic-tokeninput-loading flex">
+                    {loadingComponent}
+                </li>}
+            </ul>
         );
     }
 }

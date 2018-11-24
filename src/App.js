@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import categories from './categories';
-import TokenInput from './TokenInput';
+import MultiSelect from './MultiSelect';
 import './App.scss';
 
 class App extends Component {
@@ -26,7 +26,7 @@ class App extends Component {
                     <form>
                         <div className="FormGroup MultiSelect">
                             <label>Categories</label>
-                            <TokenInput
+                            <MultiSelect
                                 isDisabled={false}
                                 showListOnFocus={false}
                                 options={this.state.options}
