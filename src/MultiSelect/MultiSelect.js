@@ -151,7 +151,7 @@ export default class MultiSelect extends Component {
                         {options}
                     </Combobox>
                 </li>
-                {this.state.loading && <li className="tokeninput-loading">
+                {this.state.loading && <li className="combobox-loading">
                     {loadingComponent}
                 </li>}
             </ul>
