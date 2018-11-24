@@ -28,7 +28,6 @@ class App extends Component {
                             <label>Categories</label>
                             <TokenInput
                                 isDisabled={false}
-                                showListOnFocus={false}
                                 options={this.state.options}
                                 onChange={this.onChangeSelect}
                                 selected={this.state.selectedOptions}

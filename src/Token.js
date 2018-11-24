@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-export default class Token extends React.Component {
+export default class Token extends Component {
     handleClick = () => {
         this.props.onRemove(this.props.value)
     };

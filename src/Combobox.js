@@ -1,10 +1,27 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { addClass } from './AddClass.service';
 import ComboboxOption from './ComboboxOption';
-
+var k = function(){};
 var guid = 0;
 
 export default class Combobox extends Component {
+    static propTypes = {
+        onFocus: PropTypes.func,
+        onInput: PropTypes.func,
+        onSelect: PropTypes.func,
+        placeholder: PropTypes.string
+    };
+
+    static defaultProps = {
+        autocomplete: 'both',
+        onFocus: k,
+        onInput: k,
+        onSelect: k,
+        value: null,
+        showListOnFocus: false
+    };
+
     componentWillMount() {
         this.setState({menu: this.makeMenu(this.props.children)});
     }
