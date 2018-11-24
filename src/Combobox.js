@@ -1,10 +1,53 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { addClass } from './AddClass.service';
 import ComboboxOption from './ComboboxOption';
 var guid = 0;
 var k = function(){};
 
 export default class Combobox extends Component {
+    static propTypes = {
+        onFocus: PropTypes.func,
+
+        /**
+         * Called when the combobox receives user input, this is your chance to
+         * filter the data and rerender the options.
+         *
+         * Signature:
+         *
+         * ```js
+         * function(userInput){}
+         * ```
+         */
+        onInput: PropTypes.func,
+
+        /**
+         * Called when the combobox receives a selection. You probably want to reset
+         * the options to the full list at this point.
+         *
+         * Signature:
+         *
+         * ```js
+         * function(selectedValue){}
+         * ```
+         */
+        onSelect: PropTypes.func,
+
+        /**
+         * Shown when the combobox is empty.
+         */
+        placeholder: PropTypes.string
+    };
+
+    static defaultProps = {
+        autocomplete: 'both',
+        onFocus: k,
+        onInput: k,
+        onSelect: k,
+        value: null,
+        showListOnFocus: false
+    };
+
     componentWillMount() {
         this.setState({menu: this.makeMenu(this.props.children)});
     }

@@ -1,5 +1,8 @@
 export default [
   { value: '1002', label: 'Automotive (Cars, Trucks, Racing)' },
+  { value: '1011', label: 'Aut ' },
+  { value: '1110', label: 'Automo' },
+  { value: '1102', label: 'Au' },
   { value: '1008', label: 'eSports & Video Games' },
   { value: '1012', label: 'Politics' },
   { value: '1022', label: 'Sports' },

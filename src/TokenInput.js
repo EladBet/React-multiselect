@@ -1,9 +1,24 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Combobox from './Combobox';
 import Token from './Token';
 
 export default class TokenInput extends Component {
+    static propTypes = {
+        isLoading: PropTypes.bool,
+        loadingComponent: PropTypes.any,
+        onFocus: PropTypes.func,
+        onInput: PropTypes.func.isRequired,
+        onSelect: PropTypes.func.isRequired,
+        tokenAriaFunc: PropTypes.func,
+        onRemove: PropTypes.func.isRequired,
+        selected: PropTypes.array.isRequired,
+        menuContent: PropTypes.any,
+        showListOnFocus: PropTypes.bool,
+        placeholder: PropTypes.string
+    };
+
     state = {
         selectedToken: null
     };
