@@ -242,8 +242,6 @@ export default class Combobox extends Component {
     selectOption = (child, options) => {
         options = options || {};
         this.setState({
-            value: Object.assign({}, child.props.value),
-            // inputValue: getLabel(child),
             matchedAutocompleteOption: null
         }, () => {
             this.props.onSelect(child.props.value, child);

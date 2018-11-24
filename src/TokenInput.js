@@ -11,18 +11,14 @@ import './MultiSelect.scss';
 
 export default class TokenInput extends Component {
     static propTypes = {
-        loading: PropTypes.bool,
-        loadingComponent: PropTypes.any,
-        onFocus: PropTypes.func,
-        onInput: PropTypes.func.isRequired,
-        onSelect: PropTypes.func.isRequired,
-        tokenAriaFunc: PropTypes.func,
-        onRemove: PropTypes.func.isRequired,
         selected: PropTypes.array.isRequired,
-        menuContent: PropTypes.any,
         showListOnFocus: PropTypes.bool,
-        placeholder: PropTypes.string
+        placeholder: PropTypes.string,
+        isDisabled: PropTypes.bool,
+        options: PropTypes.any,
+        onChange: PropTypes.func
     };
+
 
     state = {
         input: '',
@@ -45,21 +41,38 @@ export default class TokenInput extends Component {
         this.handleRemove(this.props.selected[this.props.selected.length - 1]);
     };
 
-    ///
     handleRemove = (value) => {
-        var selectedOptions = uniq(without(this.props.selected, value))
-        this.props.onChange(selectedOptions)
+        const input = this.comboLi.querySelector('input');
+        input.focus();
+        const selectedItem = this.state.options.map((state) => {
+            if (state.value === value.value) {
+                state.isSelected = true;
+            }
+            return state;
+        });
+        const options = this.state.options.map((state) => {
+            if (state.value === value.value) {
+                state.isSelected = false;
+            }
+            return state;
+        });
+        const selectedOptions = uniq(without(this.props.selected, value));
+        this.props.onChange(selectedOptions);
+        this.setState({ options });
     };
 
-    handleSelect = (value, combobox) => {
-        if (typeof value === 'string') {
-            value = { value: value, label: value };
-        }
-
-        var selected = uniq(this.props.selected.concat([value]))
+    handleSelect = (value) => {
+        const options = this.state.options.map((state) => {
+            if (state.value === value.value) {
+                state.isSelected = true;
+            }
+            return state;
+        });
+        const selected = uniq(this.props.selected.concat([value]));
         this.setState({
-            selectedToken: null
-        })
+            selectedToken: null,
+            options
+        });
 
         this.props.onChange(selected)
     };
@@ -71,7 +84,7 @@ export default class TokenInput extends Component {
             options: []
         });
         setTimeout(() => {
-            this.filterTags(this.state.input)
+            this.filterTags(this.state.input);
             this.setState({
                 loading: false
             })
@@ -81,15 +94,9 @@ export default class TokenInput extends Component {
     filterTags = (userInput) => {
         if (userInput === '')
             return this.setState({ options: [] });
-        var filter = new RegExp('^' + userInput, 'i');
-        var filteredNames = this.props.options.filter((state) => {
+        const filter = new RegExp('^' + userInput, 'i');
+        const filteredNames = this.props.options.filter((state) => {
             return filter.test(state.label);
-        }).filter((state) => {
-            return this.props.selected
-                .map(function (value) {
-                    return value.label
-                })
-                .indexOf(state.label) === -1
         });
         this.setState({
             options: filteredNames
@@ -109,14 +116,11 @@ export default class TokenInput extends Component {
         });
     };
 
-    ///
-
     render() {
-        var isDisabled = this.props.isDisabled;
-        var tokens = this.props.selected.map((token) => {
+        const isDisabled = this.props.isDisabled;
+        const tokens = this.props.selected.map((token) => {
             return (
                 <Token
-                    tokenAriaFunc={this.props.tokenAriaFunc}
                     onFocus={this.handleFocus}
                     onRemove={this.handleRemove}
                     value={token}
@@ -125,16 +129,16 @@ export default class TokenInput extends Component {
             );
         });
 
-        var classes = classnames('ic-tokens flex', {
+        const classes = classnames('ic-tokens flex', {
             'ic-tokens-disabled': isDisabled
         });
 
-        var options = this.state.options.length ?
+        const options = this.state.options.length ?
             this.renderComboboxOptions() : [];
 
         const loadingComponent = (
             <img src={loadingGif} />
-        )
+        );
 
         return (
             <ul className={classes} onClick={this.handleClick}>

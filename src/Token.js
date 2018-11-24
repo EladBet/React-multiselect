@@ -10,11 +10,6 @@ export default class Token extends Component {
         if (key.keyCode === enterKey) this.props.onRemove(this.props.value)
     };
 
-    ariaLabelRemove = () => {
-        return this.props.tokenAriaFunc ? this.props.tokenAriaFunc(this.props.name) :
-            'Remove \'' + this.props.name + '\'';
-    };
-
     render() {
         return (
             <li className="ic-token inline-flex">
@@ -26,7 +21,6 @@ export default class Token extends Component {
                 onClick={this.handleClick}
                 onFocus={this.props.onFocus}
                 onKeyDown={this.handleKeyDown}
-                aria-label={this.ariaLabelRemove()}
                 className="ic-token-delete-button"
                 tabIndex={0}>
             ✕

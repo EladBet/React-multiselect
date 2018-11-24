@@ -6,20 +6,20 @@ export default class ComboboxOption extends Component {
     static propTypes = {
         value: PropTypes.any.isRequired,
         label: PropTypes.string,
-        isFocusable: PropTypes.bool
+        isFocusable: PropTypes.bool,
+        isSelected: PropTypes.bool
     };
 
     static defaultProps = {
         role: 'option',
         tabIndex: '-1',
         className: 'ic-tokeninput-option',
-        isSelected: false,
         isFocusable: true
     };
 
     render() {
         var data = Object.assign({}, this.props);
-        if (data.isSelected) {
+        if (data.isSelected || data.value.isSelected) {
             data.className = addClass(this.props.className, 'ic-tokeninput-selected');
             data.ariaSelected = true;
         }
