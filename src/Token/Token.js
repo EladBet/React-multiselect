@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './Token.scss';
 
 export default class Token extends Component {
     handleClick = () => {
@@ -12,8 +13,8 @@ export default class Token extends Component {
 
     render() {
         return (
-            <li className="ic-token inline-flex">
-            <span className="ic-token-label">
+            <li className="token">
+            <span className="token-label">
               {this.props.name}
             </span>
             <span
@@ -21,7 +22,7 @@ export default class Token extends Component {
                 onClick={this.handleClick}
                 onFocus={this.props.onFocus}
                 onKeyDown={this.handleKeyDown}
-                className="ic-token-delete-button"
+                className="token-delete-button"
                 tabIndex={0}>
             ✕
             </span>

@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { uniq, without } from 'lodash-node';
-import classnames from 'classnames';
-import Combobox from './Combobox';
-import ComboboxOption from './ComboboxOption';
-import Token from './Token';
-import loadingGif from './spinner.gif';
+import cn from 'classnames';
+import Combobox from '../Combobox/Combobox';
+import ComboboxOption from '../ComboboxOption/ComboboxOption';
+import Token from '../Token/Token';
+import loadingGif from '../spinner.gif';
 import './MultiSelect.scss'
-
-import './MultiSelect.scss';
 
 export default class MultiSelect extends Component {
     static propTypes = {
@@ -43,14 +41,11 @@ export default class MultiSelect extends Component {
     };
 
     handleRemove = (value) => {
+        if (typeof value === 'undefined') {
+            return;
+        }
         const input = this.comboLi.querySelector('input');
         input.focus();
-        const selectedItem = this.state.options.map((state) => {
-            if (state.value === value.value) {
-                state.isSelected = true;
-            }
-            return state;
-        });
         const options = this.state.options.map((state) => {
             if (state.value === value.value) {
                 state.isSelected = false;
@@ -110,7 +105,6 @@ export default class MultiSelect extends Component {
                 <ComboboxOption
                     key={name.value}
                     value={name}
-                    className="ic-tokeninput-option"
                     isFocusable={name.label.length > 1}
                 >{name.label}</ComboboxOption>
             );
@@ -130,10 +124,6 @@ export default class MultiSelect extends Component {
             );
         });
 
-        const classes = classnames('ic-tokens flex', {
-            'ic-tokens-disabled': isDisabled
-        });
-
         const options = this.state.options.length ?
             this.renderComboboxOptions() : [];
 
@@ -142,12 +132,13 @@ export default class MultiSelect extends Component {
         );
 
         return (
-            <ul className={classes} onClick={this.handleClick}>
+            <ul className={cn('tokens', {
+                'tokens-disabled': isDisabled
+            })} onClick={this.handleClick}>
                 {tokens}
                 <li className="inline-flex" ref={e => this.comboLi = e}>
                     <Combobox
                         id={this.props.value}
-                        aria-label={this.props['combobox-aria-label']}
                         showListOnFocus={this.props.showListOnFocus}
                         ariaDisabled={isDisabled}
                         onFocus={this.handleFocus}
@@ -156,12 +147,11 @@ export default class MultiSelect extends Component {
                         onRemoveLast={this.handleRemoveLast}
                         value={this.state.selectedToken}
                         isDisabled={isDisabled}
-                        autocomplete="inline"
                         placeholder={this.props.placeholder}>
                         {options}
                     </Combobox>
                 </li>
-                {this.state.loading && <li className="ic-tokeninput-loading flex">
+                {this.state.loading && <li className="tokeninput-loading">
                     {loadingComponent}
                 </li>}
             </ul>

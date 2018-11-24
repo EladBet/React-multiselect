@@ -1,0 +1,26 @@
+.token {
+  background-color: #777b80;
+  border: 1px solid #C1C7CF;
+  color: #ffffff;
+  border-radius: 3px;
+  padding: 3px 8px;
+  margin-right: 6px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  display: inline-flex;
+
+  .token-label {
+    line-height: 20px;
+  }
+
+  .token-delete-button {
+    font-size: 1rem;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+
+  .token-delete-button:hover {
+    background-color: #ddd;
+  }
+}
+

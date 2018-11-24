@@ -1,0 +1,41 @@
+.MultiSelect {
+  width: 100%;
+
+  .tokens {
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+    list-style: none;
+    padding: 6px 6px;
+    border: 1px solid #A6A6A6;
+    background-color: #3b3b3b;
+    border-radius: 3px;
+    cursor: text;
+    position: relative;
+    will-change: transform;
+    flex-wrap: wrap;
+    min-height: 41px;
+    display: flex;
+
+    &.tokens-disabled {
+      border: 1px solid #CCCCCC;
+      background-color: #545b64;
+      color: #eee;
+      cursor: default;
+      box-shadow: inset 0 0 6px #ddd;
+    }
+  }
+
+  .inline-flex {
+    display: inline-flex;
+  }
+
+  .tokeninput-loading {
+    position: absolute;
+    bottom: 9px;
+    right: 2px;
+    align-items: center;
+    padding-right: 6px;
+    display: flex;
+  }
+}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { addClass } from './AddClass.service';
+import './ComboboxOption.scss';
+import cn from 'classnames';
 
 export default class ComboboxOption extends Component {
     static propTypes = {
@@ -13,14 +14,15 @@ export default class ComboboxOption extends Component {
     static defaultProps = {
         role: 'option',
         tabIndex: '-1',
-        className: 'ic-tokeninput-option',
         isFocusable: true
     };
 
     render() {
         var data = Object.assign({}, this.props);
+        data.className = cn('combobox-option', {
+            'combobox-option-selected': data.isSelected || data.value.isSelected
+        });
         if (data.isSelected || data.value.isSelected) {
-            data.className = addClass(this.props.className, 'ic-tokeninput-selected');
             data.ariaSelected = true;
         }
         return (

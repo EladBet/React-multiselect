@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import categories from './categories';
-import MultiSelect from './MultiSelect';
+import MultiSelect from './MultiSelect/MultiSelect';
 import './App.scss';
 
 class App extends Component {
