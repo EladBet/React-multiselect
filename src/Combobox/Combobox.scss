@@ -3,6 +3,7 @@ combobox {
 }
 
 .combobox-input {
+  color: #fff;
   padding-right: 20px;
   width: 100%;
   box-sizing: border-box;
@@ -32,6 +33,7 @@ combobox {
 .combobox-list {
   display: none;
   position: absolute;
+  height: 148px;
   z-index: 1;
   border: 1px solid #aaa;
   background: #545b64;

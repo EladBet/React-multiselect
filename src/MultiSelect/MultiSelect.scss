@@ -18,11 +18,9 @@
     display: flex;
 
     &.tokens-disabled {
-      border: 1px solid #CCCCCC;
-      background-color: #545b64;
-      color: #eee;
-      cursor: default;
-      box-shadow: inset 0 0 6px #ddd;
+      opacity: .5;
+      color: gray;
+      cursor: not-allowed;
     }
   }
 

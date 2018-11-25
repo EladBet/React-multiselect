@@ -369,7 +369,7 @@ export default class Combobox extends Component {
                 <span
                     aria-hidden="true"
                     className="combobox-button"
-                    onClick={this.handleButtonClick}>
+                    onClick={!this.props.isDisabled && this.handleButtonClick}>
           ▾
                 </span>
                 <div

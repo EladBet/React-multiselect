@@ -19,7 +19,7 @@ export default class Token extends Component {
             </span>
             <span
                 role="button"
-                onClick={this.handleClick}
+                onClick={!this.props.isDisabled && this.handleClick}
                 onFocus={this.props.onFocus}
                 onKeyDown={this.handleKeyDown}
                 className="token-delete-button"

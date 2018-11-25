@@ -120,6 +120,7 @@ export default class MultiSelect extends Component {
                     onRemove={this.handleRemove}
                     value={token}
                     name={token.label}
+                    isDisabled={isDisabled}
                     key={token.value} />
             );
         });

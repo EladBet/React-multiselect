@@ -32,7 +32,7 @@ class App extends Component {
                                 options={this.state.options}
                                 onChange={this.onChangeSelect}
                                 selected={this.state.selectedOptions}
-                                placeholder='Enter tokens here'
+                                placeholder='Search'
                             />
                         </div>
                         <label>Selected</label>
