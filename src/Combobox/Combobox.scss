@@ -33,14 +33,13 @@ combobox {
 .combobox-list {
   display: none;
   position: absolute;
-  height: 148px;
+  max-height: 148px;
   z-index: 1;
   border: 1px solid #aaa;
   background: #545b64;
   top: 100%;
   left: 0;
   padding: 5px 0px;
-  max-height: 400px;
   overflow: auto;
   font-size: 12px;
   font-family: sans-serif;

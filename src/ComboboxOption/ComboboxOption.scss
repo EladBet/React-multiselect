@@ -1,7 +1,7 @@
 .combobox-option {
   display: block;
   cursor: pointer;
-  padding: 10px 40px;
+  padding: 10px 30px;
   font-size: 14px;
 
   &:focus {
@@ -12,6 +12,8 @@
   &.combobox-option-selected:before {
     content: '✓';
     position: absolute;
-    left: 4px;
+    font-weight: bold;
+    left: 10px;
+    margin-top: -3px;
   }
 }
